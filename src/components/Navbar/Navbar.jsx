@@ -7,13 +7,26 @@ import { IoIosFolderOpen } from "react-icons/io";
 import { IoIosPerson } from "react-icons/io";
 import { IoIosMailOpen } from "react-icons/io";
 import { useRouter } from "next/navigation";
-import {motion} from 'framer-motion'
+import { motion } from "framer-motion";
+import Corner from "./Corner/Corner";
 
 const botones = [
-  { title: "Home",link:'/', component: <IoIosHome size={30}></IoIosHome> },
-  { title: "Projects",link:'/projects', component: <IoIosListBox size={30}></IoIosListBox> },
-  { title: "Contact",link:'/contact', component: <IoIosMailOpen size={30}></IoIosMailOpen> },
-  { title: "About Me",link:'/aboutme', component: <IoIosPerson size={30}></IoIosPerson> },
+  { title: "Home", link: "/", component: <IoIosHome size={30}></IoIosHome> },
+  {
+    title: "Projects",
+    link: "/projects",
+    component: <IoIosListBox size={30}></IoIosListBox>,
+  },
+  {
+    title: "Contact",
+    link: "/contact",
+    component: <IoIosMailOpen size={30}></IoIosMailOpen>,
+  },
+  {
+    title: "About Me",
+    link: "/aboutme",
+    component: <IoIosPerson size={30}></IoIosPerson>,
+  },
 ];
 
 const Navbar = () => {
@@ -21,15 +34,15 @@ const Navbar = () => {
   const [position, setPosition] = useState(null); // Inicializamos como null
   const navRefs = useRef([]);
   const router = useRouter();
-  console.log('routerrr', router.pathname)
+  console.log("routerrr", router.pathname);
 
   useEffect(() => {
     if (typeof window !== "undefined") {
       // Determina el índice activo basado en la ruta actual
       const currentPath = window.location.pathname;
       const activeIndex = botones.findIndex((bt) => bt.link === currentPath);
-      console.log('currentPAth:', currentPath)
-      console.log('activeIndex',activeIndex)
+      console.log("currentPAth:", currentPath);
+      console.log("activeIndex", activeIndex);
       if (activeIndex !== -1) {
         setActive(activeIndex);
         // Calcula la posición inicial basada en el botón activo
@@ -58,19 +71,30 @@ const Navbar = () => {
   };
 
   return (
-    <div className="h-24 w-full fixed bottom-0 bg-white border-t- [2px] border-gray-500 flex flex-row">
+    <div className="h-24 w-full fixed bottom-0 border-t-[2px] border-[#090a13] bg-[#090a13] border-[2px] flex flex-row">
       {/* Renderizamos el span solo cuando `position` está definido */}
       {position !== null && (
-        <motion.span
-        initial={{ scale: 0, x: "-50%" }} //Ajuste de -50 para centrar el elemento y no se posicione mal con el elemento de framer-motion
-        animate={{ scale: 1, x: "-50%", left: position }}
-        transition={{ type: "spring", stiffness: 300, damping: 25 }}
-        className="bg-rose-600 border-2 border-gray-900 w-16 h-16 absolute 
-        -top-3 rounded-full"
-        style={{
-          transformOrigin: "center",
-        }}
-      ></motion.span>
+        <motion.div
+          initial={{ scale: 0, x: "-50%" }}
+          animate={{ scale: 1, x: "-50%", left: position }}
+          transition={{ type: "spring", stiffness: 300, damping: 25 }}
+          className="absolute -top-4 left-0 transform -translate-x-1/2 flex items-center justify-center w-16 h-16 z-10"
+        >
+          {/* Contenedor de sombras detrás */}
+          <div className="absolute inset-0 -z-10">
+            <span
+              className="w-5 h-5 bg-transparent absolute top-3.5 -left-[20px] 
+            rounded-tr-[11px] shadow-myShadow1"
+            ></span>
+            <span
+              className="w-5 h-5 bg-transparent absolute top-3.5 -right-[20px] 
+            rounded-tl-[11px] shadow-myShadow2"
+            ></span>
+          </div>
+
+          {/* Círculo principal */}
+          <span className="bg-rose-600 border-4 border-white w-16 h-16 rounded-full"></span>
+        </motion.div>
       )}
       {botones.map((bt, index) => (
         <Link
@@ -78,15 +102,21 @@ const Navbar = () => {
           key={index}
           ref={(el) => (navRefs.current[index] = el)} // Asignar la referencia
           onClick={() => handleMenu(index)}
-          className="w-1/4 bg-gray-200 flex flex-col items-center justify-center"
-        > 
-        <div className={`${active==index ? "-translate-y-4 transition-all duration-700 text-white":"text-black translate-y-3"}`}>
-          {bt.component}
-        </div>
+          className="w-1/4 bg-[#090a13] flex flex-col items-center justify-center"
+        >
+          <div
+            className={`${
+              active == index
+                ? "-translate-y-5 z-10 transition-all duration-700 text-white"
+                : "text-white translate-y-3"
+            }`}
+          >
+            {bt.component}
+          </div>
           <span
             className={`${
               active === index
-                ? "translate-y-2 duration-700 opacity-100 text-black font-bold"
+                ? "translate-y-1 duration-700 opacity-100 text-white font-bold"
                 : "opacity-0 translate-y-10 transition-all"
             }`}
           >
